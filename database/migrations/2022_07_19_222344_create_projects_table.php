@@ -39,12 +39,12 @@ class CreateProjectsTable extends Migration
                 ->onUpdate('SET NULL')
                 ->onDelete('SET NULL');
 
-            $table->foreignId('type_project_id')
+            $table->foreignId('project_type_id')
                 ->constrained()
                 ->onUpdate('SET NULL')
                 ->onDelete('SET NULL');
 
-            $table->foreignId('status_project_id')
+            $table->foreignId('project_status_id')
                 ->constrained()
                 ->onUpdate('SET NULL')
                 ->onDelete('SET NULL');
