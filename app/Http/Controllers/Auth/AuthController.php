@@ -42,14 +42,13 @@ class AuthController extends Controller
                 'password' => bcrypt($attr['password']),
                 'email' => $attr['email'],
                 'role_id' => $attr["role"],
-                'institution_id' => $attr["institution"],
-                'email_verified_at' => $attr['role'] != 2 ? new DateTime() : null
+                'institution_id' => $attr["institution"]
             ]);
             //si el rol no es el de cliente, no hace falta la verificación
 
             return $this->success(["user"=>$user],"Usuario registrado correctamente.");
         } catch (\Exception $e) {
-            return $this->error($e->message,500,$e);
+            return $this->error("Ha ocurrido un error en el servidor",500,$e);
         }
     }
 
