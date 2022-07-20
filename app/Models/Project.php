@@ -32,4 +32,12 @@ class Project extends Model
         'type_project_id',
         'status_project_id'
     ];
+
+    public function institution () {
+        return $this->belongsTo(Institution::class);
+    }
+
+    public function user () {
+        return $this->belongsTo(User::class);
+    }
 }
