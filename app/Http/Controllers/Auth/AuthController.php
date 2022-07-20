@@ -71,16 +71,9 @@ class AuthController extends Controller
 
         $credentials["email"] = strtolower($credentials["email"]);
 
-        $status = User::where('email',$credentials["email"])->first();
+        $user = User::where('email',$credentials["email"])->first();
 
-        if($status){
-            if($status->active == 0){
-                return response()->json([
-                    "error"=>true,
-                    "message"=>"El usuario se encuentra inactivo en estos momentos."
-                ]);
-            }
-        }else{
+        if(empty($user)) {
             return response()->json([
                 "error"=>true,
                 "message"=>"No se ha encontrado el usuario con el correo indicado."
