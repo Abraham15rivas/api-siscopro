@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Decisor\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Group route: User Auth
+Route::middleware('auth')->group(function () {
+    // Group route: v1
+    Route::prefix('v1')->group(function () {
+        // Group route: Decisor
+        Route::group([
+            'prefix'     => 'decisor',
+            'middleware' => 'decisor',
+        ], function () {
+            // Project
+            Route::post('project', [ProjectController::class, 'store']);
+        });
+    
+        // Group route: Signatory
+        Route::group([
+            'prefix'     => 'signatory',
+            'middleware' => 'signatory',
+        ], function () {
+            // code here
+        });
+    });
 });

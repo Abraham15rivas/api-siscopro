@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,14 @@ trait ApiResponser
 		   $result.=$char;
 		}
 		return $result;
-	 }
+	}
 
+	public function reportError($error) {
+        Log::info('====================== ERROR ======================');
+        Log::info('Date America/Caracas: ' . Carbon::now()->setTimezone('America/Caracas')->format('Y-m-d H:i:s'));
+        Log::info('File: ' . $error->getFile());
+        Log::info('Message: ' . $error->getMessage());
+        Log::info('Line: ' . $error->getLine());
+        Log::info('===================================================');
+    }
 }
