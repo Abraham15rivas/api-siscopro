@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('dni')->unique();
             $table->string('password');
-            $table->boolean('active')->default(true);
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });
