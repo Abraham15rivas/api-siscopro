@@ -25,7 +25,11 @@ Route::middleware('auth')->group(function () {
             'middleware' => 'decisor',
         ], function () {
             // Project
+            Route::post('projects', [ProjectController::class, 'index']);
             Route::post('project', [ProjectController::class, 'store']);
+            Route::get('project/{id}', [ProjectController::class, 'show']);
+            Route::put('project/{id}', [ProjectController::class, 'update']);
+            Route::delete('project/{id}', [ProjectController::class, 'destroy']);
         });
     
         // Group route: Signatory
