@@ -16,7 +16,7 @@ use App\Http\Controllers\Decisor\ProjectController;
 */
 
 // Group route: User Auth
-Route::middleware('auth')->group(function () {
+Route::middleware('auth.jwt')->group(function () {
     // Group route: v1
     Route::prefix('v1')->group(function () {
         // Group route: Decisor
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
             Route::put('project/{id}', [ProjectController::class, 'update']);
             Route::delete('project/{id}', [ProjectController::class, 'destroy']);
         });
-    
+
         // Group route: Signatory
         Route::group([
             'prefix'     => 'signatory',
