@@ -50,7 +50,7 @@ class ProjectController extends Controller
             'scope'             => 'required|string',
             'justification'     => 'required|string',
             'observations'      => 'nullable|string',
-            'requested_amount'  => 'required|decimal',
+            'requested_amount'  => 'nullable|between:0,99.99',
             'execution_time'    => 'required|string',
             'actors'            => 'required|array',
             'productive_engine' => 'required|string',
@@ -63,7 +63,7 @@ class ProjectController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->json($validator->errors());
+            return response()->json($validator->errors());
         }
 
         try {
@@ -75,7 +75,7 @@ class ProjectController extends Controller
             $project->observations      = $request->observations;
             $project->requested_amount  = $request->requested_amount;
             $project->execution_time    = $request->execution_time;
-            $project->actors            = $request->actors;
+            $project->actors            = json_encode($request->actors);
             $project->productive_engine = $request->productive_engine;
             $project->product_project   = $request->product_project;
             $project->project_taxes     = $request->project_taxes;
@@ -87,6 +87,7 @@ class ProjectController extends Controller
             $project->status_project_id = $request->status_project_id;
             $project->save();
         } catch (\Exception $e) {
+            $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
 
@@ -141,6 +142,7 @@ class ProjectController extends Controller
             $project->status_project_id = $request->status_project_id;
             $project->save();
         } catch (\Exception $e) {
+            $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
 
