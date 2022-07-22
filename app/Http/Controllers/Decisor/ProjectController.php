@@ -17,6 +17,7 @@ class ProjectController extends Controller
     public function index() {
         try {
             $projects = Project::select(
+                'id',
                 'title',
                 'general_objective',
                 'scope',
@@ -29,18 +30,14 @@ class ProjectController extends Controller
                 'product_project',
                 'project_taxes',
                 'direct_benefits',
-                'investment_line',
-                'user_id',
-                'institution_id',
-                'type_project_id',
-                'status_project_id'
+                'investment_line'
             )
             ->get();
         } catch (\Exception $e) {
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
 
-        return $this->success('List projects', 200, $projects);
+        return $this->success($projects, 'List projects', 200);
     }
 
     public function store(Request $request) {
@@ -50,7 +47,7 @@ class ProjectController extends Controller
             'scope'             => 'required|string',
             'justification'     => 'required|string',
             'observations'      => 'nullable|string',
-            'requested_amount'  => 'nullable|between:0,99.99',
+            'requested_amount'  => 'nullable',
             'execution_time'    => 'required|string',
             'actors'            => 'required|array',
             'productive_engine' => 'required|string',
@@ -58,8 +55,8 @@ class ProjectController extends Controller
             'project_taxes'     => 'required|string',
             'direct_benefits'   => 'required|string',
             'investment_line'   => 'nullable|string',
-            'type_project_id'   => 'required|integer',
-            'status_project_id' => 'required|integer',
+            'project_type_id'   => 'required|integer',
+            'project_status_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -81,10 +78,10 @@ class ProjectController extends Controller
             $project->project_taxes     = $request->project_taxes;
             $project->direct_benefits   = $request->direct_benefits;
             $project->investment_line   = $request->investment_line;
-            $project->user_id           = $request->user_id;
-            $project->institution_id    = $request->institution_id;
-            $project->type_project_id   = $request->type_project_id;
-            $project->status_project_id = $request->status_project_id;
+            $project->user_id           = $request->user()->id;
+            $project->institution_id    = $request->user()->institution_id;
+            $project->project_type_id   = $request->project_type_id;
+            $project->project_status_id = $request->project_status_id;
             $project->save();
         } catch (\Exception $e) {
             $this->reportError($e);
@@ -95,7 +92,29 @@ class ProjectController extends Controller
     }
 
     public function show($id) {
+        try {
+            $project = Project::select(
+                'id',
+                'title',
+                'general_objective',
+                'scope',
+                'justification',
+                'observations',
+                'requested_amount',
+                'execution_time',
+                'actors',
+                'productive_engine',
+                'product_project',
+                'project_taxes',
+                'direct_benefits',
+                'investment_line'
+            )
+            ->find($id);
+        } catch (\Exception $e) {
+            return $this->error("Ha ocurrido un error en el servidor", 500, $e);
+        }
 
+        return $this->success($project, 'Project', 200);
     }
 
     public function update(Request $request, $id) {
@@ -113,8 +132,8 @@ class ProjectController extends Controller
             'project_taxes'     => 'required|string',
             'direct_benefits'   => 'required|string',
             'investment_line'   => 'nullable|string',
-            'type_project_id'   => 'required|integer',
-            'status_project_id' => 'required|integer',
+            'project_type_id'   => 'required|integer',
+            'project_status_id' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -136,10 +155,10 @@ class ProjectController extends Controller
             $project->project_taxes     = $request->project_taxes;
             $project->direct_benefits   = $request->direct_benefits;
             $project->investment_line   = $request->investment_line;
-            $project->user_id           = $request->user_id;
-            $project->institution_id    = $request->institution_id;
-            $project->type_project_id   = $request->type_project_id;
-            $project->status_project_id = $request->status_project_id;
+            $project->user_id           = $request->user()->id;
+            $project->institution_id    = $request->user()->institution_id;
+            $project->project_type_id   = $request->project_type_id;
+            $project->project_status_id = $request->project_status_id;
             $project->save();
         } catch (\Exception $e) {
             $this->reportError($e);
