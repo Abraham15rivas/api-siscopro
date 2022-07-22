@@ -16,7 +16,7 @@ use App\Http\Controllers\Decisor\ProjectController;
 */
 
 // Group route: User Auth
-Route::middleware('auth')->group(function () {
+Route::middleware('auth.jwt')->group(function () {
     // Group route: v1
     Route::prefix('v1')->group(function () {
         // Group route: Decisor
@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
             // Project
             Route::post('project', [ProjectController::class, 'store']);
         });
-    
+
         // Group route: Signatory
         Route::group([
             'prefix'     => 'signatory',
