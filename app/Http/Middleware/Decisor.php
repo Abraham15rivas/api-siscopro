@@ -20,7 +20,7 @@ class Decisor
     public function handle(Request $request, Closure $next)
     {
         if (!$request->ajax()) {
-            return  response()->json($this->error('Bad Request', 400));
+            return $this->error('Bad Request', 400);
         }
 
         $userRole = $request->user()->role_id;
@@ -28,7 +28,7 @@ class Decisor
         if (intval($userRole) === 1) {
             return $next($request);
         } else {
-            return response()->json($this->error('No tiene los permisos necesarios para acceder a los recursos solicitados', 403));
+            return $this->error('No tiene los permisos necesarios para acceder a los recursos solicitados', 403);
         }
     }
 }

@@ -29,7 +29,7 @@ class Project extends Model
         'investment_line',
         'user_id',
         'institution_id',
-        'type_project_id',
-        'status_project_id'
+        'project_type_id',
+        'project_status_id'
     ];
 }
