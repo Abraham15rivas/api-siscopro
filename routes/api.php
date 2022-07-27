@@ -29,7 +29,7 @@ Route::middleware('auth.jwt')->group(function () {
             Route::post('project', [ProjectController::class, 'store']);
             Route::get('project/{id}', [ProjectController::class, 'show']);
             Route::put('project/{id}', [ProjectController::class, 'update']);
-            Route::delete('project/{id}', [ProjectController::class, 'destroy']);
+            Route::delete('project/{project}', [ProjectController::class, 'destroy']);
         });
 
         // Group route: Signatory
