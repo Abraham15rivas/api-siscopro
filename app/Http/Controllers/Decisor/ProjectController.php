@@ -9,6 +9,7 @@ use App\Traits\ApiResponser;
 use App\Models\{
     Project
 };
+use Illuminate\Support\Facades\DB;
 
 class ProjectController extends Controller
 {
@@ -34,6 +35,7 @@ class ProjectController extends Controller
             )
             ->get();
         } catch (\Exception $e) {
+            $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
 
@@ -63,6 +65,8 @@ class ProjectController extends Controller
             return response()->json($validator->errors());
         }
 
+        DB::beginTransaction();
+
         try {
             $project = new Project();
             $project->title             = $request->title;
@@ -83,7 +87,10 @@ class ProjectController extends Controller
             $project->project_type_id   = $request->project_type_id;
             $project->project_status_id = $request->project_status_id;
             $project->save();
+
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollback();
             $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
@@ -111,6 +118,7 @@ class ProjectController extends Controller
             )
             ->find($id);
         } catch (\Exception $e) {
+            $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
 
@@ -119,6 +127,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id) {
         $validator = Validator::make($request->all(), [
+            'id'                => 'required|integer',
             'title'             => 'required|string',
             'general_objective' => 'required|string',
             'scope'             => 'required|string',
@@ -140,6 +149,8 @@ class ProjectController extends Controller
             return redirect()->json($validator->errors());
         }
 
+        DB::beginTransaction();
+
         try {
             $project = Project::findOrFail($id);
             $project->title             = $request->title;
@@ -160,7 +171,10 @@ class ProjectController extends Controller
             $project->project_type_id   = $request->project_type_id;
             $project->project_status_id = $request->project_status_id;
             $project->save();
+
+            DB::commit();
         } catch (\Exception $e) {
+            DB::rollback();
             $this->reportError($e);
             return $this->error("Ha ocurrido un error en el servidor", 500, $e);
         }
@@ -168,7 +182,14 @@ class ProjectController extends Controller
         return response()->json('done');
     }
 
-    public function destroy($id) {
+    public function destroy(Project $project) {
+        try {
+            $project->delete();
+        } catch (\Exception $e) {
+            $this->reportError($e);
+            return $this->error("Ha ocurrido un error en el servidor", 500, $e);
+        }
 
+        return $this->success([], 'done', 200);
     }
 }
