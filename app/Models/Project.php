@@ -24,7 +24,7 @@ class Project extends Model
         'actors',
         'productive_engine',
         'product_project',
-        'project_taxes',
+        'project_impact',
         'direct_benefits',
         'investment_line',
         'user_id',

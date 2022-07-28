@@ -25,7 +25,7 @@ class CreateProjectsTable extends Migration
             $table->jsonb('actors');
             $table->longText('productive_engine');
             $table->longText('product_project');
-            $table->longText('project_taxes');
+            $table->longText('project_impact');
             $table->longText('direct_benefits');
             $table->longText('investment_line')->nullable();
 
